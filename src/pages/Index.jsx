@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Text, Input, VStack, Heading } from '@chakra-ui/react';
 
 const Index = () => {
@@ -7,6 +7,17 @@ const Index = () => {
   const [attempts, setAttempts] = useState(3);
   const [hint, setHint] = useState('');
   const [gameOver, setGameOver] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(30);
+
+  useEffect(() => {
+    if (timeLeft > 0 && !gameOver) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (timeLeft === 0) {
+      setHint('Time is up! Game over!');
+      setGameOver(true);
+    }
+  }, [timeLeft, gameOver]);
 
   const handleGuess = () => {
     if (gameOver) return;
@@ -42,6 +53,7 @@ const Index = () => {
     setAttempts(3);
     setHint('');
     setGameOver(false);
+    setTimeLeft(30);
   };
 
   return (
@@ -49,6 +61,7 @@ const Index = () => {
       <Heading mb={6}>Number Guessing Game</Heading>
       <Text fontSize="lg">{gameOver ? hint : `Hint: ${hint}`}</Text>
       <Text fontSize="lg">Attempts left: {attempts}</Text>
+      <Text fontSize="lg">Time left: {timeLeft} seconds</Text>
       <Input
         placeholder="Enter a number between 1 and 100"
         value={guess}
