@@ -20,12 +20,14 @@ const Index = () => {
     if (numGuess === targetNumber) {
       setHint('Congratulations! You guessed the number!');
       setGameOver(true);
-    } else if (attempts - 1 === 0) {
-      setHint(`Game over! The number was ${targetNumber}.`);
-      setGameOver(true);
     } else {
-      setHint(numGuess < targetNumber ? 'Think higher!' : 'Think lower!');
-      setAttempts(attempts - 1);
+      setAttempts(attempts - 1); // Decrement attempts first
+      if (attempts - 1 === 0) {
+         setHint(`Game over! The number was ${targetNumber}.`);
+         setGameOver(true);
+      } else {
+         setHint(numGuess < targetNumber ? 'Think higher!' : 'Think lower!');
+      }
     }
     setGuess('');
   };
