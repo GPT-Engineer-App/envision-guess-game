@@ -9,15 +9,18 @@ const Index = () => {
   const [gameOver, setGameOver] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
 
+  // Handle the countdown timer and game over conditions
   useEffect(() => {
+    // Timer should only run if there's time left and the game isn't over
     if (timeLeft > 0 && !gameOver) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
     } else if (timeLeft === 0) {
+      // Handle game over when time runs out
       setHint('Time is up! Game over!');
       setGameOver(true);
     }
-  }, [timeLeft, gameOver]);
+  }, [timeLeft, gameOver]); // Depend on timeLeft and gameOver to manage timer updates
 
   const handleGuess = () => {
     if (gameOver) return;
@@ -28,11 +31,13 @@ const Index = () => {
       return;
     }
 
+    // Check if the guessed number is correct
     if (numGuess === targetNumber) {
       setHint('Congratulations! You guessed the number!');
       setGameOver(true);
     } else {
-      setAttempts(attempts - 1); // Decrement attempts first
+      // Decrement attempts and provide feedback
+      setAttempts(attempts - 1);
       if (attempts - 1 === 0) {
          setHint(`Game over! The number was ${targetNumber}.`);
          setGameOver(true);
@@ -47,13 +52,14 @@ const Index = () => {
     setGuess(event.target.value);
   };
 
+  // Reset the game to initial state
   const resetGame = () => {
     setTargetNumber(Math.floor(Math.random() * 100) + 1);
     setGuess('');
     setAttempts(3);
     setHint('');
     setGameOver(false);
-    setTimeLeft(30);
+    setTimeLeft(30); // Reset the timer to 30 seconds
   };
 
   return (
